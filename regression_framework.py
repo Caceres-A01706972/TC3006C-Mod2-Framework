@@ -2,10 +2,12 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import learning_curve
+from sklearn.metrics import confusion_matrix
 
 
 """
@@ -76,7 +78,13 @@ def evaluate_model(model, X_train, y_train, X_test, y_test):
     train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
-    return train_accuracy, test_accuracy
+    #Confusion Matrix
+    conf_matrix = confusion_matrix(y_test, y_test_pred)
+
+    # Classification report
+    classification_rep = classification_report(y_test, y_test_pred)
+
+    return train_accuracy, test_accuracy, conf_matrix, classification_rep
 
 
 
@@ -106,7 +114,12 @@ def plot_learning_curves(model, X, y, train_sizes=np.linspace(0.1, 1.0, 10), cv=
     plt.grid(True)
     plt.show()
 
-
+def plot_conf_matrix(conf_matrix):
+    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues')
+    plt.xlabel('Predicciones')
+    plt.ylabel('Valores Reales')
+    plt.title('Matriz de Confusión')
+    plt.show()
 
 """
     Si el usuario quiere hacer predicciones usando el modelo que fue entranado.
@@ -144,10 +157,13 @@ if __name__ == "__main__":
     # Train the logistic regression model
     model = train_logistic_regression(X_train, y_train)
     # Evaluate and print model accuracy
-    train_accuracy, test_accuracy = evaluate_model(model, X_train, y_train, X_test, y_test)
+    train_accuracy, test_accuracy, conf_matrix, classification_rep = evaluate_model(model, X_train, y_train, X_test, y_test)
     print(f'Precisión en conjunto de entrenamiento: {train_accuracy * 100:.2f}%')
     print(f'Precisión en conjunto de prueba: {test_accuracy * 100:.2f}%')
+    print(classification_rep)
     # Plot learning curves
     plot_learning_curves(model, X, y)
+    # Plot conf matrix
+    plot_conf_matrix(conf_matrix)
     # Make predictions
     make_predictions(model)
