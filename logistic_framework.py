@@ -52,7 +52,8 @@ def load_diabetes_dataset(file_path='DataSets/diabetes2.csv'):
         model (LogisticRegression): Trained logistic regression model.
 """
 def train_logistic_regression(X_train, y_train, max_iter=1000):
-    model = LogisticRegression(max_iter=max_iter)
+    # Aplicar regularización L2 con el parámetro C
+    model = LogisticRegression(max_iter=max_iter, C=0.01)
     model.fit(X_train, y_train)
     return model
 
@@ -172,6 +173,10 @@ def make_predictions(model):
 
 if __name__ == "__main__":
     X_train, X_test, y_train, y_test = load_diabetes_dataset()
+    
+    # Ajusta la fuerza de la regularización cambiando el valor de regularization_strength
+    regularization_strength = 10.0  # Puedes cambiar este valor según sea necesario
+    
     model = train_logistic_regression(X_train, y_train)
     train_accuracy, test_accuracy, conf_matrix, classification_rep = evaluate_model(model, X_train, y_train, X_test, y_test)
     
