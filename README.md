@@ -18,6 +18,7 @@ El código se compone de la siguiente manera:
   `pandas`
   `matplotlib`
   `scikit-learn`
+  `seaborn`
 
 - **Ejecución del Código**
 1. Ejecuta el código en un entorno de Python.
